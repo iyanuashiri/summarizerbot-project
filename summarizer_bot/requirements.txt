@@ -1,6 +1,8 @@
 goose3==3.1.6
 nltk==3.7
 numpy==1.23.1
+python-decouple==3.6
+redis==4.4.0
 sumy==0.8.1
 tweepy==4.12.1
 twitter_threader==1.5.0
