@@ -1,8 +1,7 @@
 import logging
-from operator import itemgetter
 
 import tweepy
-from get_mentions.config import redis_db, TWITTER_USERNAME_ID, TWITTER_BEARER_TOKEN
+from get_mentions.config import redis_db, TWITTER_USERNAME_ID, TWITTER_BEARER_TOKEN, SINCE_ID
 
 logger = logging.getLogger()
 
@@ -28,11 +27,6 @@ def process_referenced_tweets(referenced_tweets):
                 return '1612594344501837824' 'check'
     except TypeError:
         return '1612594344501837824', 'check'
-
-
-def process_urls(urls):
-    for url in urls:
-        url, expanded_url = url['url'], url['expanded_url']
 
 
 def get_latest_mentions(api, user_id, since_id):
@@ -69,9 +63,8 @@ def get_latest_mentions(api, user_id, since_id):
 
 def lambda_handler(event, context):
     event = event
-    since_id = int(redis_db.get('since_id'))
+    since_id = int(redis_db.get('since_id')) or SINCE_ID
     connected_api = connect_api(bearer_token=TWITTER_BEARER_TOKEN)
     details = list(get_latest_mentions(api=connected_api, user_id=TWITTER_USERNAME_ID, since_id=since_id))
-    sorted_details = sorted(details, key=itemgetter('newest_id'), reverse=True)
-    redis_db.set('since_id', sorted_details[0]['newest_id'])
+    redis_db.set('since_id', details[0]['newest_id'])
     return details
