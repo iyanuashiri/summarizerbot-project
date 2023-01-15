@@ -1,4 +1,5 @@
 import logging
+import json
 
 import tweepy
 import redis
@@ -94,8 +95,12 @@ def get_latest_mentions(api, user_id, since_id):
 
 def lambda_handler(event, context):
     event = event
-    since_id = int(redis_db.get('since_id')) or SINCE_ID
+    if redis_db.get('since_id') is None:
+        since_id = SINCE_ID
+    else:
+        since_id = redis_db.get('since_id')
+
     connected_api = connect_api(bearer_token=TWITTER_BEARER_TOKEN)
     details = list(get_latest_mentions(api=connected_api, user_id=TWITTER_USERNAME_ID, since_id=since_id))
     redis_db.set('since_id', details[0]['newest_id'])
-    return details
+    return json.dumps(details, default=str)
