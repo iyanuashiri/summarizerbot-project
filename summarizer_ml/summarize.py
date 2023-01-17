@@ -29,12 +29,6 @@ def summarize_article(url, sentence_count):
     return " ".join(sentences)
 
 
-# def context(url, sentence_count, algorithm_type=1):
-#     if algorithm_type == Algorithm.NLTK.value:
-#         return summarize_by_nltk(url=url, sentence_count=sentence_count)
-#     raise NotImplementedError(f'Algorithm {algorithm_type} does not exist')
-
-
 def summarize_thread(thread, sentence_count):
     parser = PlaintextParser.from_string(thread, Tokenizer(LANGUAGE))
     stemmer = Stemmer(LANGUAGE)

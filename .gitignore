@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 
 .idea
+
+summarizer_web/app.db
