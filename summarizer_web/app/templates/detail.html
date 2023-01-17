@@ -1,0 +1,12 @@
+{% extends "landpage.html" %}
+
+{% block content %}
+    <div class="mx-64 mt-8 p-16 rounded-b-lg border-green-700 border-t-2 shadow-lg">
+        <h1 class="text-6xl text-center">{{ summary.title }}</h1>
+        <p class="text-center text-sm p-8 text-green-700"><a target="_blank" href="{{ summary.url }}">FULL ARTICLE</a></p>
+
+        <p class="text-justify text-base">{{ summary.summary }}</p>
+    </div>
+
+
+{% endblock %}

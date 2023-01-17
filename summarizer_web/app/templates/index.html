@@ -1,0 +1,20 @@
+    {% include 'landpage.html' %}
+
+    {% block content %}
+        <div class="mx-40 mb-40 mt-24 bg-white">
+
+            <h2 class="py-8 text-2xl">Latest</h2>
+
+            <div class="grid grid-cols-3 gap-4">
+
+                {% for summary in summaries %}
+                    <div class="rounded-b-lg border-t-2 border-green-700 shadow-lg px-4 pt-4 pb-2 border-gray-200 space-y-16">
+                        <h2 class="text-2xl text-center">{{ summary.title }}</h2>
+                        <p class="text-green-700 hover:underline text-center"><a href="{{ url_for('main.detail', summary_id=summary.id ) }}">Read more...</a></p>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    {% endblock %}
