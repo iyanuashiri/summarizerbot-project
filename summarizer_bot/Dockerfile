@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
 COPY bot.py ${LAMBDA_TASK_ROOT}
 
 
-CMD ["bot.lambda_handler_1"]
+CMD ["bot.lambda_handler"]
