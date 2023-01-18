@@ -31,9 +31,6 @@ def connect_api(consumer_key, consumer_secret, access_token_key, access_token_se
 
 
 def post_article(api, username, urls: List, replied_tweet_id):
-    url = urls[0]['url']
-    # title = get_title(url=url)
-
     if len(urls) == 0:
         pass
     elif len(urls) >= 1:
@@ -48,6 +45,8 @@ def post_article(api, username, urls: List, replied_tweet_id):
 
 def lambda_handler(event, context):
     details = json.loads(event)
+
+    details = details['detail']['detail']
     connected_api = connect_api(consumer_key=TWITTER_CONSUMER_KEY, consumer_secret=TWITTER_CONSUMER_SECRET,
                                 access_token_secret=TWITTER_ACCESS_TOKEN_SECRET, access_token_key=TWITTER_ACCESS_TOKEN)
     tweeted_ids = []
