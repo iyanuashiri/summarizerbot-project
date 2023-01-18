@@ -4,10 +4,10 @@ import json
 import tweepy
 import redis
 from decouple import config
+
 # from get_mentions.config import redis_db, TWITTER_USERNAME_ID, TWITTER_BEARER_TOKEN, SINCE_ID
 
 logger = logging.getLogger()
-
 
 TWITTER_CONSUMER_KEY = config("TWITTER_CONSUMER_KEY")
 TWITTER_CONSUMER_SECRET = config("TWITTER_CONSUMER_SECRET")
@@ -28,7 +28,6 @@ REDIS_HOST_DEV = config('REDIS_HOST_DEV')
 REDIS_PASSWORD_PROD = config('REDIS_PASSWORD_DEV')
 REDIS_PORT_PROD = config('REDIS_PORT_DEV')
 REDIS_HOST_PROD = config('REDIS_HOST_DEV')
-
 
 if config("CURRENT_ENV") == "development":
     redis_db = redis.Redis(host=REDIS_HOST_DEV, port=REDIS_PORT_DEV, password=REDIS_PASSWORD_DEV, ssl=True)
@@ -87,10 +86,8 @@ def get_latest_mentions(api, user_id, since_id):
         yield {'urls': urls, 'replied_tweet_id': replied_tweet_id, 'replied_tweet': response_2_data['text'],
                'mentioned_tweet_id': mentioned_tweet['id'], 'mentioned_tweet': mentioned_tweet['text'],
                'user_id_that_mentioned_tweet': user_id_that_mentioned_tweet,
-               'username_that_mentioned_tweet': username_that_mentioned_tweet,
-               'username_that_mentioned_bot': mentioned_tweet, 'username_that_shared_link': '',
-               'newest_id': newest_id, 'entities': entities, 'response_2': response_2,
-               'response_2_data': response_2_data, 'reference_tweet_type': reference_tweet_type}
+               'username_that_mentioned_tweet': username_that_mentioned_tweet, 'newest_id': newest_id,
+               'response_2_data': response_2_data, 'reference_tweet_type': reference_tweet_type, 'entities': entities}
 
 
 def lambda_handler(event, context):
@@ -101,6 +98,14 @@ def lambda_handler(event, context):
         since_id = redis_db.get('since_id')
 
     connected_api = connect_api(bearer_token=TWITTER_BEARER_TOKEN)
-    details = list(get_latest_mentions(api=connected_api, user_id=TWITTER_USERNAME_ID, since_id=since_id))
-    redis_db.set('since_id', details[0]['newest_id'])
-    return json.dumps(details, default=str)
+    detail = list(get_latest_mentions(api=connected_api, user_id=TWITTER_USERNAME_ID, since_id=since_id))
+    redis_db.set('since_id', detail[0]['newest_id'])
+
+    detail_json = {
+        "detail": {
+            'detail': detail
+        },
+        "detail-type": "Twitter Mentions Notification",
+        "source": "twitter.mentions"
+    }
+    return json.dumps(detail_json, default=str)
