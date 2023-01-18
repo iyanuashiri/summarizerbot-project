@@ -1,14 +1,11 @@
-FROM python:3.9.13-alpine
+FROM public.ecr.aws/lambda/python:3.8
 
-WORKDIR /app
-
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
 
 RUN pip install --upgrade pip
-COPY requirements.txt /app/
-RUN pip install -r requirements.txt
+COPY requirements.txt .
+RUN pip install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
 
-COPY . /app/
+COPY bot.py ${LAMBDA_TASK_ROOT}
 
-CMD ["/app/bot.lambda_handler"]
+
+CMD ["bot.lambda_handler_1"]
