@@ -36,7 +36,7 @@ def post_article(api, username, urls: List, replied_tweet_id):
 
     if len(urls) == 0:
         pass
-    elif len(urls) == 1:
+    elif len(urls) >= 1:
         title = urls[0]['title']
         title = slugify(title)
         link = f'{DOMAIN_URL}/blog/{title}'
