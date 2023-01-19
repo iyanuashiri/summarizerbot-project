@@ -1,12 +1,17 @@
-import logging
+import sys
 from typing import List
 import json
 
 import tweepy
+from tweepy.errors import Forbidden
 from decouple import config
 from slugify import slugify
+from loguru import logger
 
-logger = logging.getLogger()
+
+logger.remove(0)
+logger.add(sys.stderr, level="INFO", format="{time:MMMM D, YYYY > HH:mm:ss} | {level} | {message}", serialize=True)
+
 
 DOMAIN_URL = config('DOMAIN_URL')
 TWITTER_CONSUMER_KEY = config("TWITTER_CONSUMER_KEY")
@@ -51,7 +56,10 @@ def lambda_handler(event, context):
                                 access_token_secret=TWITTER_ACCESS_TOKEN_SECRET, access_token_key=TWITTER_ACCESS_TOKEN)
     tweeted_ids = []
     for detail in details:
-        tweet_id = post_article(api=connected_api, username=detail['username_that_mentioned_tweet'],
-                                urls=detail['urls'], replied_tweet_id=detail['replied_tweet_id'])
-        tweeted_ids.append(tweet_id)
+        try:
+            tweet_id = post_article(api=connected_api, username=detail['username_that_mentioned_tweet'],
+                                    urls=detail['urls'], replied_tweet_id=detail['replied_tweet_id'])
+            tweeted_ids.append(tweet_id)
+        except Forbidden:
+            logger.info("Trying to create a tweet more than once. Twitter API prevents duplicate tweets.")
     return json.dumps(tweeted_ids, default=str)
