@@ -1,9 +1,10 @@
 from __future__ import absolute_import
 from __future__ import division, print_function, unicode_literals
 
+import json
+
 import nltk
 from sumy.parsers.html import HtmlParser
-from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer as Summarizer
 from sumy.nlp.stemmers import Stemmer
@@ -14,7 +15,11 @@ LANGUAGE = "english"
 nltk.download('punkt')
 
 
-def summarize_article(url, sentence_count):
+def summarize_article(urls):
+    url = urls[0]['url']
+    title = urls[0]['title']
+
+    sentence_count = 5
     parser = HtmlParser.from_url(url, Tokenizer(LANGUAGE))
     stemmer = Stemmer(LANGUAGE)
 
@@ -26,19 +31,26 @@ def summarize_article(url, sentence_count):
     for sentence in summarizer(parser.document, sentence_count):
         sentences.append(str(sentence))
 
-    return " ".join(sentences)
+    summary = " ".join(sentences)
+
+    return {'summary': summary, 'url': url, 'title': title}
 
 
-def summarize_thread(thread, sentence_count):
-    parser = PlaintextParser.from_string(thread, Tokenizer(LANGUAGE))
-    stemmer = Stemmer(LANGUAGE)
+def lambda_handler(event, context):
+    details = json.loads(event)
 
-    summarizer = Summarizer(stemmer)
-    summarizer.stop_words = get_stop_words(LANGUAGE)
-    
-    sentences = []
+    summaries = []
 
-    for sentence in summarizer(parser.document, sentence_count):
-        sentences.append(str(sentence))
-    
-    return " ".join(sentences)
+    for detail in details:
+        summary = summarize_article(urls=detail['urls'])
+        summaries.append(summary)
+
+    detail_json = {
+        "detail": {
+            'detail': summaries
+        },
+        "detail-type": "Summary Notification",
+        "source": "summary.notification"
+    }
+
+    return json.dumps(detail_json, default=str)
