@@ -3,7 +3,6 @@ from __future__ import division, print_function, unicode_literals
 
 import json
 
-import nltk
 from sumy.parsers.html import HtmlParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer as Summarizer
@@ -11,15 +10,13 @@ from sumy.nlp.stemmers import Stemmer
 from sumy.utils import get_stop_words
 
 LANGUAGE = "english"
-
-nltk.download('punkt')
+SENTENCE_COUNT = 5
 
 
 def summarize_article(urls):
-    url = urls[0]['url']
+    url = urls[0]['expanded_url']
     title = urls[0]['title']
 
-    sentence_count = 5
     parser = HtmlParser.from_url(url, Tokenizer(LANGUAGE))
     stemmer = Stemmer(LANGUAGE)
 
@@ -28,7 +25,7 @@ def summarize_article(urls):
 
     sentences = []
 
-    for sentence in summarizer(parser.document, sentence_count):
+    for sentence in summarizer(parser.document, SENTENCE_COUNT):
         sentences.append(str(sentence))
 
     summary = " ".join(sentences)
@@ -38,6 +35,7 @@ def summarize_article(urls):
 
 def lambda_handler(event, context):
     details = json.loads(event)
+    details = details['detail']['detail']
 
     summaries = []
 
