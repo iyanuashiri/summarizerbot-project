@@ -10,7 +10,7 @@ from loguru import logger
 
 
 logger.remove(0)
-logger.add(sys.stderr, level="INFO", format="{time:MMMM D, YYYY > HH:mm:ss} | {level} | {message}", serialize=True)
+logger.add(sys.stderr, level="INFO", format="{time:MMMM D, YYYY > HH:mm:ss} | {level} | {message}", serialize=False)
 
 
 DOMAIN_URL = config('DOMAIN_URL')
