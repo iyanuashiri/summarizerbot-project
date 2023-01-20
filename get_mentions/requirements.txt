@@ -1,3 +1,4 @@
+loguru==0.6.0
 python-decouple==3.6
 redis==4.4.0
 tweepy==4.12.1

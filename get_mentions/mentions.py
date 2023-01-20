@@ -1,13 +1,15 @@
-import logging
 import json
+import sys
 
 import tweepy
 import redis
 from decouple import config
+from loguru import logger
 
-# from get_mentions.config import redis_db, TWITTER_USERNAME_ID, TWITTER_BEARER_TOKEN, SINCE_ID
 
-logger = logging.getLogger()
+logger.remove(0)
+logger.add(sys.stderr, level="INFO", format="{time:MMMM D, YYYY > HH:mm:ss} | {level} | {message}", serialize=False)
+
 
 TWITTER_CONSUMER_KEY = config("TWITTER_CONSUMER_KEY")
 TWITTER_CONSUMER_SECRET = config("TWITTER_CONSUMER_SECRET")
@@ -64,7 +66,11 @@ def get_latest_mentions(api, user_id, since_id):
     response = api.get_users_mentions(id=user_id, since_id=since_id,
                                       tweet_fields=['referenced_tweets', 'author_id'])
     meta = response[3]
-    newest_id = meta['newest_id']
+    try:
+        newest_id = meta['newest_id']
+    except KeyError as e:
+        logger.exception(e)
+
     mentioned_tweets = response[0]
     for mentioned_tweet in mentioned_tweets:
         referenced_tweets = mentioned_tweet['referenced_tweets']
