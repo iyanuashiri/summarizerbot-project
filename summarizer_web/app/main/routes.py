@@ -1,7 +1,8 @@
 from flask import render_template
 
-from summarizer_web.app.models import Summary
-from summarizer_web.app.main import bp
+
+from ..models import Summary
+from ..main import bp
 
 
 @bp.route('/')

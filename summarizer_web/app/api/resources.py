@@ -1,9 +1,7 @@
 from flask_restful import Resource, reqparse, marshal_with, fields, Api
 
-from summarizer_web.app import create_app
-from summarizer_web.app.models import Summary
-from summarizer_web.app.api import bp
-from summarizer_web.helpers import create_summary
+from . import bp
+from ..helpers import create_summary
 
 api = Api(bp)
 

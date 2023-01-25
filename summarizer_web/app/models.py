@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from summarizer_web.app import db
+from . import db
 
 
 class Summary(db.Model):

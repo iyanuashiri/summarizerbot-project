@@ -1,5 +1,6 @@
 from flask import render_template
-from summarizer_web.app.errors import bp
+
+from ..errors import bp
 
 
 @bp.app_errorhandler(404)

@@ -5,27 +5,28 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from summarizer_web.config import Config
+
+from . import config
 
 db = SQLAlchemy()
 migrate = Migrate()
 
 
-def create_app(config_class=Config):
+def create_app(config_class=config.Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
     db.init_app(app)
     migrate.init_app(app, db)
 
-    from summarizer_web.app.errors import bp as errors_bp
-    app.register_blueprint(errors_bp)
+    from . import errors
+    app.register_blueprint(errors.bp)
 
-    from summarizer_web.app.main import bp as main_bp
-    app.register_blueprint(main_bp)
+    from . import main
+    app.register_blueprint(main.bp)
 
-    from summarizer_web.app.api import bp as api_bp
-    app.register_blueprint(api_bp, url_prefix='/api')
+    from . import api
+    app.register_blueprint(api.bp, url_prefix='/api')
 
     if not app.debug and not app.testing:
         # ...
@@ -51,4 +52,4 @@ def create_app(config_class=Config):
     return app
 
 
-from summarizer_web.app import models
+from . import models
