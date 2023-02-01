@@ -107,11 +107,4 @@ def lambda_handler(event, context):
     detail = list(get_latest_mentions(api=connected_api, user_id=TWITTER_USERNAME_ID, since_id=since_id))
     redis_db.set('since_id', detail[0]['newest_id'])
 
-    detail_json = {
-        "detail": {
-            'detail': detail
-        },
-        "detail-type": "Twitter Mentions Notification",
-        "source": "twitter.mentions"
-    }
-    return json.dumps(detail_json, default=str)
+    return json.dumps(detail, default=str)

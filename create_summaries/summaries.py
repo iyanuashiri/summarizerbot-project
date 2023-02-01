@@ -16,8 +16,8 @@ async def create_summaries(title, summary, url, session):
 
 
 async def main(event):
-    details = json.loads(event)
-    details = details['detail']['detail']
+    response_payload = event['responsePayload']
+    details = json.loads(response_payload)
     async with aiohttp.ClientSession() as session:
         tasks = [create_summaries(title=detail['title'], summary=detail['summary'], url=detail['url'], session=session)
                  for detail in details]

@@ -49,9 +49,8 @@ def post_article(api, username, urls: List, replied_tweet_id):
 
 
 def lambda_handler(event, context):
-    details = json.loads(event)
-
-    details = details['detail']['detail']
+    response_payload = event['detail']['responsePayload']
+    details = json.loads(response_payload)
     connected_api = connect_api(consumer_key=TWITTER_CONSUMER_KEY, consumer_secret=TWITTER_CONSUMER_SECRET,
                                 access_token_secret=TWITTER_ACCESS_TOKEN_SECRET, access_token_key=TWITTER_ACCESS_TOKEN)
     tweeted_ids = []

@@ -34,21 +34,12 @@ def summarize_article(urls):
 
 
 def lambda_handler(event, context):
-    details = json.loads(event)
-    details = details['detail']['detail']
-
+    response_payload = event['detail']['responsePayload']
+    details = json.loads(response_payload)
     summaries = []
 
     for detail in details:
         summary = summarize_article(urls=detail['urls'])
         summaries.append(summary)
 
-    detail_json = {
-        "detail": {
-            'detail': summaries
-        },
-        "detail-type": "Summary Notification",
-        "source": "summary.notification"
-    }
-
-    return json.dumps(detail_json, default=str)
+    return json.dumps(summaries, default=str)
