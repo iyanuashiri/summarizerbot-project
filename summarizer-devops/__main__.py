@@ -49,7 +49,7 @@ summarizer_bot = create_function(resource_name_='summarizer-bot-prod', name_='su
                                  image_uri='605344284032.dkr.ecr.us-east-1.amazonaws.com/summarizer-project:summarizer-bot',
                                  role='arn:aws:iam::605344284032:role/service-role/get-twitter-mentions-role-tvqidii8')
 
-summarizer_ml = create_function(resource_name_='summarizer-ml-prodv', name_='summarizer-ml-prod',
+summarizer_ml = create_function(resource_name_='summarizer-ml-prod', name_='summarizer-ml-prod',
                                 description='Lambda function to summarize an article by using sumy AI package',
                                 image_uri='605344284032.dkr.ecr.us-east-1.amazonaws.com/summarizer-project:summarizer-ml',
                                 role='arn:aws:iam::605344284032:role/service-role/get-twitter-mentions-role-tvqidii8',
