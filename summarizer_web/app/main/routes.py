@@ -18,3 +18,9 @@ def index():
 def detail(uuid):
     summary = Summary.query.filter_by(uuid=uuid).first()
     return render_template('detail.html', summary=summary)
+
+
+# @bp.route('/blog/<int:summarizer_id>')
+# def detail(summarizer_id):
+#     summary = Summary.query.get(summarizer_id)
+#     return render_template('detail.html', summary=summary)
