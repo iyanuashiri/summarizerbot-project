@@ -1,5 +1,6 @@
 import json
 import sys
+import uuid
 
 import tweepy
 import redis
@@ -93,7 +94,8 @@ def get_latest_mentions(api, user_id, since_id):
                'mentioned_tweet_id': mentioned_tweet['id'], 'mentioned_tweet': mentioned_tweet['text'],
                'user_id_that_mentioned_tweet': user_id_that_mentioned_tweet,
                'username_that_mentioned_tweet': username_that_mentioned_tweet, 'newest_id': newest_id,
-               'response_2_data': response_2_data, 'reference_tweet_type': reference_tweet_type, 'entities': entities}
+               'response_2_data': response_2_data, 'reference_tweet_type': reference_tweet_type, 'entities': entities,
+               'uuid': uuid.uuid4().hex}
 
 
 def lambda_handler(event, context):
