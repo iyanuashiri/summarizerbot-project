@@ -7,3 +7,8 @@
 3. docker build -t summarizer-web .
 4. docker run -d -p 5000:5000 summarizer-web
 5. docker compose up --build
+
+
+1. flask db init
+2. flask db migrate -m "---"
+3. flask db upgrade
