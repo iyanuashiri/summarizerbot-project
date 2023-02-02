@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, url_for
 
 
 from ..models import Summary
@@ -9,12 +9,12 @@ from ..main import bp
 def index():
     # summaries = Summary.query.order_by().limit(30)
     # summaries = Summary.query.limit(15).all()
-    summaries = Summary.query.all()[-15:-1]
+    summaries = Summary.query.all()[-15:]
     title = "This is the future"
     return render_template('index.html', title=title, summaries=summaries)
 
 
-@bp.route('/blog/<int:summary_id>')
-def detail(summary_id):
-    summary = Summary.query.get(summary_id)
+@bp.route('/blog/<string:uuid>')
+def detail(uuid):
+    summary = Summary.query.filter_by(uuid=uuid).first()
     return render_template('detail.html', summary=summary)
