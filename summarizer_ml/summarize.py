@@ -13,7 +13,7 @@ LANGUAGE = "english"
 SENTENCE_COUNT = 5
 
 
-def summarize_article(urls):
+def summarize_article(urls, uuid):
     url = urls[0]['expanded_url']
     title = urls[0]['title']
 
@@ -30,7 +30,7 @@ def summarize_article(urls):
 
     summary = " ".join(sentences)
 
-    return {'summary': summary, 'url': url, 'title': title}
+    return {'summary': summary, 'url': url, 'title': title, 'uuid': uuid}
 
 
 def lambda_handler(event, context):
@@ -39,7 +39,7 @@ def lambda_handler(event, context):
     summaries = []
 
     for detail in details:
-        summary = summarize_article(urls=detail['urls'])
+        summary = summarize_article(urls=detail['urls'], uuid=detail['uuid'])
         summaries.append(summary)
 
     return json.dumps(summaries, default=str)
