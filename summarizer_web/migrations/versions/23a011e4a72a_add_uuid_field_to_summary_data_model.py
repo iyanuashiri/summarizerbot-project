@@ -1,8 +1,8 @@
-"""run migrations
+"""add uuid field to Summary data model
 
-Revision ID: ff45b74ad68d
+Revision ID: 23a011e4a72a
 Revises: 
-Create Date: 2023-01-17 11:11:59.612600
+Create Date: 2023-02-02 12:01:14.944492
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ff45b74ad68d'
+revision = '23a011e4a72a'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,7 +24,9 @@ def upgrade():
     sa.Column('summary', sa.String(), nullable=True),
     sa.Column('url', sa.String(), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
-    sa.PrimaryKeyConstraint('id')
+    sa.Column('uuid', sa.String(), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('uuid')
     )
     op.create_index(op.f('ix_summary_timestamp'), 'summary', ['timestamp'], unique=False)
     # ### end Alembic commands ###
