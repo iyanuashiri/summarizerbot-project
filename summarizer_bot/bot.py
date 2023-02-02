@@ -35,13 +35,12 @@ def connect_api(consumer_key, consumer_secret, access_token_key, access_token_se
     return auth
 
 
-def post_article(api, username, urls: List, replied_tweet_id):
+def post_article(api, username, urls: List, replied_tweet_id, uuid):
     if len(urls) == 0:
         pass
     elif len(urls) >= 1:
         title = urls[0]['title']
-        title = slugify(title)
-        link = f'{DOMAIN_URL}/blog/{title}'
+        link = f'{DOMAIN_URL}/blog/{uuid}'
         reply = f'Read the summary you asked for on this link {link} below'
         result = api.create_tweet(text=f'@{username} {reply}', in_reply_to_tweet_id=replied_tweet_id)
         return result[0]['id']
@@ -57,7 +56,7 @@ def lambda_handler(event, context):
     for detail in details:
         try:
             tweet_id = post_article(api=connected_api, username=detail['username_that_mentioned_tweet'],
-                                    urls=detail['urls'], replied_tweet_id=detail['replied_tweet_id'])
+                                    urls=detail['urls'], replied_tweet_id=detail['replied_tweet_id'], uuid=detail['uuid'])
             tweeted_ids.append(tweet_id)
         except Forbidden:
             logger.info("Trying to create a tweet more than once. Twitter API prevents duplicate tweets.")
