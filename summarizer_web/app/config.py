@@ -12,6 +12,9 @@ class Config:
     SECRET_KEY: str = 'my-secret-key'
     # SECRET_KEY: str = os.getenv('SECRET_KEY')
     # LOG_TO_STDOUT: str = os.getenv('LOG_TO_STDOUT')
-    SQLALCHEMY_DATABASE_URI: str = os.getenv('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, '../app.db')
+    SQLALCHEMY_DATABASE_URI: str = 'postgres://iyanuashiri:PnJ90QfsBGwc@ep-crimson-pond-299050.us-east-2.aws.neon.tech/neondb'
     SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
     TEMPLATES_AUTO_RELOAD: bool = True
+
+
+# or 'sqlite:///' + os.path.join(basedir, '../app.db')
