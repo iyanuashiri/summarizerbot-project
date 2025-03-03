@@ -27,6 +27,9 @@ ecr_result = create_repository(resource_name_='summarizer-project', name_='summa
 app_runner_result = create_service(resource_name_='summarizer-project', service_name_='summarizerbot-dev',
                                    source_configuration_=source_config)
 
+new_app_runner_result = create_service(resource_name_='new-summarizer-project', service_name_='new-summarizer-web',
+                                       source_configuration_=source_config)
+
 ####################################
 # Lambda
 ###################################
@@ -56,16 +59,8 @@ summarizer_ml = create_function(resource_name_='summarizer-ml-prod', name_='summ
                                 role='arn:aws:iam::605344284032:role/service-role/get-twitter-mentions-role-tvqidii8',
                                 timeout=60)
 
-######################################################################################################
-# Simple Storage Service
-######################################################################################################
-
-litestream_bucket = create_bucket(resource_name='summarizer-web-litestream', acl=str(ACLBucket.PRIVATE.value),
-                                  bucket='summarizer-web-litestream', force_destroy=False)
-
 # Export the name of the bucket
 pulumi.export('ecr', ecr_result.repository_url)
 pulumi.export('ecr_registry', ecr_result.registry_id)
 pulumi.export('create-summaries', create_summaries.urn)
 pulumi.export('get-mentions', get_mentions.urn)
-pulumi.export('litestream-bucket-pathname', litestream_bucket.bucket_domain_name)
