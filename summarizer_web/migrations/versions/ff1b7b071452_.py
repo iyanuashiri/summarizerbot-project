@@ -1,8 +1,8 @@
-"""move db to neon
+"""empty message
 
-Revision ID: ac9d36ab1268
+Revision ID: ff1b7b071452
 Revises: 
-Create Date: 2023-02-08 14:34:43.957612
+Create Date: 2025-05-05 14:14:22.503936
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ac9d36ab1268'
+revision = 'ff1b7b071452'
 down_revision = None
 branch_labels = None
 depends_on = None
